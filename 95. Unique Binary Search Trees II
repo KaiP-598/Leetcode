@@ -1,0 +1,45 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     public var val: Int
+ *     public var left: TreeNode?
+ *     public var right: TreeNode?
+ *     public init(_ val: Int) {
+ *         self.val = val
+ *         self.left = nil
+ *         self.right = nil
+ *     }
+ * }
+ */
+class Solution {
+    func generateTrees(_ n: Int) -> [TreeNode?] {
+        guard n > 0 else {
+            return ([])
+        }
+        return genTree(1,n)   
+    }
+    
+    func genTree(_ start: Int, _ end :Int) -> [TreeNode?]{
+        var list = [TreeNode?]()
+        
+        if start > end {
+            list.append(nil)
+            return list
+        }
+        
+        for i in start ... end {
+            var left = genTree(start, i - 1)
+            var right = genTree(i + 1, end)
+            for l in left {
+                for r in right {
+                    var root : TreeNode? = TreeNode(i)
+                    root!.left = l
+                    root!.right = r
+                    list.append(root)
+                }
+            }
+        }
+        
+        return list
+    }
+}
