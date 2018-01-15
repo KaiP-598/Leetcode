@@ -1,0 +1,46 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     public var val: Int
+ *     public var left: TreeNode?
+ *     public var right: TreeNode?
+ *     public init(_ val: Int) {
+ *         self.val = val
+ *         self.left = nil
+ *         self.right = nil
+ *     }
+ * }
+ */
+class Solution {
+    
+    var first: TreeNode?
+    var second: TreeNode?
+    var pre: TreeNode?
+    
+    func recoverTree(_ root: TreeNode?) {
+        inorder(root)
+        
+        let temp = first!.val
+        first!.val = second!.val
+        second!.val = temp
+    }
+    
+    func inorder(_ root: TreeNode?){
+        if root == nil {
+            return
+        }
+        
+        inorder(root?.left)
+        
+        //do something
+        if pre != nil && pre!.val >= root!.val {
+            if first == nil {first = pre}
+            second = root
+        }
+        
+        pre = root
+        
+        inorder(root?.right)
+        
+    }
+}
