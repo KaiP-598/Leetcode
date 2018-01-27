@@ -1,0 +1,43 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     public var val: Int
+ *     public var left: TreeNode?
+ *     public var right: TreeNode?
+ *     public init(_ val: Int) {
+ *         self.val = val
+ *         self.left = nil
+ *         self.right = nil
+ *     }
+ * }
+ */
+class Solution {
+    func buildTree(_ preorder: [Int], _ inorder: [Int]) -> TreeNode? {
+        guard preorder.count == inorder.count else {
+            return nil
+        }
+        guard preorder.count > 0 else {
+            return nil
+        }
+        
+        var dict = [Int: Int]()
+        for i in 0 ..< inorder.count {
+            dict[inorder[i]] = i
+        }
+        
+        return helper(preorder, 0, preorder.count - 1, inorder, 0, inorder.count - 1, dict)
+    }
+    
+    func helper(_ preorder: [Int], _ preLow: Int, _ preHigh: Int, _ inorder:[Int], _ inLow: Int, _ inHigh: Int,  _ dict: [Int: Int] ) -> TreeNode?{
+        guard preLow <= preHigh && inLow <= inHigh else {
+            return nil
+        }
+        
+        let root = TreeNode(preorder[preLow])
+        let mid = dict[preorder[preLow]]!
+        root.left = helper(preorder, preLow + 1, preLow + mid - inLow, inorder, inLow, mid - 1, dict)
+        root.right = helper(preorder, preLow + mid - inLow + 1, preHigh, inorder, mid + 1, inHigh, dict)
+        
+        return root
+    }
+}
